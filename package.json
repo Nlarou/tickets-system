@@ -1,0 +1,11 @@
+{
+  "name": "tickets-system",
+  "version": "1.0.0",
+  "description": "Tickets App",
+  "main": "server.js",
+  "scripts": {
+    "start": "node backend/server.js"
+  },
+  "author": "Nathaniel Larouche",
+  "license": "MIT"
+}
