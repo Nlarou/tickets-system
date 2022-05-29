@@ -1,20 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { FaPlus } from "react-icons/fa";
-import {
-  getTicket,
-  reset as ticketReset,
-  closeTicket,
-} from "../features/tickets/ticketSlice";
+import { getTicket, closeTicket } from "../features/tickets/ticketSlice";
 import Modal from "react-modal";
 import BackButton from "../components/BackButton";
 import Spinner from "../components/Spinner";
 import NoteItem from "../components/NoteItem";
-import {
-  getNotes,
-  createNote,
-  reset as noteReset,
-} from "../features/notes/noteSlice";
+import { getNotes, createNote } from "../features/notes/noteSlice";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
