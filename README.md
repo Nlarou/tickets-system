@@ -1,7 +1,7 @@
 # tickets-system
 ### Live view: https://nathanticketsystem.herokuapp.com/
 
-##IN PROGRESS
+## IN PROGRESS
 - Role Access Control
 - User management
 - Administrative page
