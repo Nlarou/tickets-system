@@ -16,6 +16,12 @@ const ticketSchema = mongoose.Schema(
       type: String,
       required: [true, "Please enter description of the issue"],
     },
+    priority: {
+      type: String,
+      required: true,
+      enum: ["critical", "high", "normal", "low"],
+      default: "normal",
+    },
     status: {
       type: String,
       required: true,

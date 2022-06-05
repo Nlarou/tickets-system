@@ -26,6 +26,19 @@ const getTickets = async (token) => {
 
   return response.data;
 };
+//get all tickets
+const getAllTickets = async (token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.get(API_URL + "all", config);
+
+  return response.data;
+};
+
 //get user ticket
 const getTicket = async (ticketId, token) => {
   const config = {
@@ -61,6 +74,7 @@ const tickerService = {
   getTickets,
   getTicket,
   closeTicket,
+  getAllTickets,
 };
 
 export default tickerService;

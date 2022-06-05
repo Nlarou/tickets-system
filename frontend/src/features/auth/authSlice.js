@@ -44,6 +44,27 @@ export const login = createAsyncThunk("auth/login", async (user, thunkAPI) => {
   }
 });
 
+//get role of user
+export const getRole = createAsyncThunk(
+  "tickets/getRole",
+  async (_, thunkAPI) => {
+    try {
+      //get the token from the auth state for the protected route
+      const token = thunkAPI.getState().auth.user.token;
+      return await authService.getRole(token);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 //logout user
 
 export const logout = createAsyncThunk("auth/logout", async () => {
@@ -93,6 +114,19 @@ export const authSlice = createSlice({
         state.isError = true;
         state.message = action.payload;
         state.user = null;
+      })
+      .addCase(getRole.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getRole.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.role = action.payload;
+      })
+      .addCase(getRole.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
       });
   },
 });

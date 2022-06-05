@@ -1,12 +1,10 @@
 import React from "react";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getTickets, reset } from "../features/tickets/ticketSlice";
-
+import { getAllTickets, reset } from "../features/tickets/ticketSlice";
 import Spinner from "../components/Spinner";
-import BackButton from "../components/BackButton";
-import TicketItem from "../components/TicketItem";
-function Tickets() {
+import DetailedTicketItem from "../components/DetailedTicketItem";
+function StaffDashboard() {
   const { tickets, isLoading, isSuccess } = useSelector(
     (state) => state.tickets
   );
@@ -19,29 +17,29 @@ function Tickets() {
     };
   }, [dispatch, isSuccess]);
   useEffect(() => {
-    dispatch(getTickets());
+    dispatch(getAllTickets());
   }, [dispatch]);
   if (isLoading) {
     return <Spinner />;
   }
   return (
     <>
-      <BackButton url="/" />
       <h1>Tickets</h1>
       <div className="tickets">
-        <div className="ticket-headings">
+        <div className="ticket-headings-staff">
           <div>Date</div>
           <div>Product</div>
+          <div>Author</div>
           <div>Priority</div>
           <div>Status</div>
           <div></div>
         </div>
-        {tickets.map((ticket) => {
-          return <TicketItem key={ticket._id} ticket={ticket} />;
+        {tickets?.map((ticket) => {
+          return <DetailedTicketItem key={ticket._id} ticket={ticket} />;
         })}
       </div>
     </>
   );
 }
 
-export default Tickets;
+export default StaffDashboard;

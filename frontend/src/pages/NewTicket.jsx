@@ -15,7 +15,7 @@ function NewTicket() {
   const [email] = useState(user.email);
   const [product, setProduct] = useState("Laptop");
   const [description, setDescription] = useState("");
-
+  const [priority] = useState("normal");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -25,13 +25,13 @@ function NewTicket() {
     }
     if (isSuccess) {
       dispatch(reset());
-      navigate("/ticket");
+      navigate("/tickets");
     }
     dispatch(reset());
   }, [dispatch, isError, isSuccess, navigate, message]);
   const onSubmit = (e) => {
     e.preventDefault();
-    dispatch(createTicket({ product, description }));
+    dispatch(createTicket({ product, description, priority }));
   };
 
   if (isLoading) {

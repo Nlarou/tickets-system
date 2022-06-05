@@ -71,13 +71,26 @@ const generateToken = (id) => {
 };
 //@desc getCurrentUser
 //@route /api/users/me
-//@access Private  access
+//@access Private access
 const getMe = asyncHandler(async (req, res) => {
   const user = { id: req.user._id, email: req.user.email, name: req.user.name };
   res.status(200).json(user);
 });
+//@desc get role of the user
+//@route /api/users/getRole
+//@access Private access
+const getRole = asyncHandler(async (req, res) => {
+  if (req.user) {
+    return res.status(200).json(req.user.role);
+  } else {
+    res.status(401);
+    throw new Error("Invalid user data");
+  }
+});
+
 module.exports = {
   registerUser,
   loginUser,
   getMe,
+  getRole,
 };

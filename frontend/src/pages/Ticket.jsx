@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { FaPlus } from "react-icons/fa";
 import { getTicket, closeTicket } from "../features/tickets/ticketSlice";
 import Modal from "react-modal";
+import { FaArrowAltCircleLeft } from "react-icons/fa";
 import BackButton from "../components/BackButton";
 import Spinner from "../components/Spinner";
 import NoteItem from "../components/NoteItem";
@@ -51,7 +52,7 @@ function Ticket() {
   const onTicketClose = () => {
     dispatch(closeTicket(ticketId));
     toast.success("Ticket Closed");
-    navigate("/tickets");
+    navigate(-1);
   };
 
   const openModal = () => {
@@ -77,7 +78,10 @@ function Ticket() {
   return (
     <div className="ticket-page">
       <header className="ticket-header">
-        <BackButton url="/tickets" />
+        <div className="btn btn-reverse btn-back" onClick={() => navigate(-1)}>
+          <FaArrowAltCircleLeft /> Back
+        </div>
+
         <h2>
           Ticket ID:{ticket._id}
           <span className={`status status-${ticket.status}`}>
@@ -89,6 +93,13 @@ function Ticket() {
           {new Date(ticket.createdAt).toLocaleDateString("en-US")}
         </h3>
         <h3>Product: {ticket.product}</h3>
+        <h3>
+          Priority:{" "}
+          <span className={`priority priority-${ticket.priority}`}>
+            {ticket.priority}
+          </span>
+        </h3>
+
         <hr />
         <div className="ticket-desc">
           <h3>Description of issue</h3>

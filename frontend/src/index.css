@@ -211,7 +211,20 @@ h3 {
 .ticket,
 .ticket-headings {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  background: #f4f4f4;
+  padding: 10px 15px;
+  border-radius: 5px;
+  text-align: center;
+}
+.ticket-details,
+.ticket-headings-staff {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
   gap: 20px;
   justify-content: space-between;
   align-items: center;
@@ -251,6 +264,40 @@ h3 {
 
 .status-closed {
   background-color: darkred;
+  color: #fff;
+  border-radius: 10px;
+}
+
+.priority {
+  background-color: #333;
+  color: #fff;
+  width: 100px;
+  padding: 0 20px;
+  justify-self: center;
+  border-radius: 10px;
+  font-size: 16px;
+  text-align: center;
+}
+
+.priority-low {
+  background-color: green;
+  color: #fff;
+  border-radius: 10px;
+}
+
+.priority-normal {
+  background-color: steelblue;
+  color: #fff;
+  border-radius: 10px;
+}
+
+.priority-high {
+  background-color: darkred;
+  color: #fff;
+  border-radius: 10px;
+}
+.priority-critical {
+  background-color: rgb(0, 0, 0);
   color: #fff;
   border-radius: 10px;
 }

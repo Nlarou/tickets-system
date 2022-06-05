@@ -16,6 +16,10 @@ function Home() {
         <FaTicketAlt />
         View my tickets
       </Link>
+      <Link to="/dashboard" className="btn btn-block">
+        <FaTicketAlt />
+        dashboard
+      </Link>
     </>
   );
 }

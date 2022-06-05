@@ -2,7 +2,7 @@ const asyncHandler = require("express-async-handler");
 
 const User = require("../models/userModel");
 const Ticket = require("../models/ticketModel");
-
+const { Mongoose } = require("mongoose");
 //@desc get user tickets
 //@route GET /api/tickets
 //@access Private access
@@ -22,7 +22,7 @@ const getTickets = asyncHandler(async (req, res) => {
 //@route POST /api/tickets
 //@access Private access
 const createTicket = asyncHandler(async (req, res) => {
-  const { product, description } = req.body;
+  const { product, description, priority } = req.body;
   if (!product || !description) {
     res.status(400);
     throw new Error("Please add a product and description");
@@ -35,6 +35,7 @@ const createTicket = asyncHandler(async (req, res) => {
   const ticket = await Ticket.create({
     product,
     description,
+    priority,
     user: req.user.id,
     status: "new",
   });
@@ -57,7 +58,7 @@ const getTicket = asyncHandler(async (req, res) => {
     throw new Error("Ticket not found");
   }
 
-  if (ticket.user.toString() !== req.user.id) {
+  if (user.role === "regular" && ticket.user.toString() !== req.user.id) {
     res.status(401);
     throw new Error("Not Authorized");
   }
@@ -118,10 +119,28 @@ const updateTicket = asyncHandler(async (req, res) => {
 
   res.status(200).json(updatedTicket);
 });
+
+//@desc get all users tickets
+//@route GET /api/tickets/all
+//@access Private access staff & admin
+const getAllTickets = asyncHandler(async (req, res) => {
+  const tickets = await await Ticket.find()
+    .sort({ _id: -1 })
+    .populate("user", "name");
+
+  //Make sure user is valid
+  if (!req.user.role === ("admin" || "staff")) {
+    res.status(401);
+    throw new Error("Not Authorized");
+  }
+  res.status(200).json(tickets);
+});
+
 module.exports = {
   getTickets,
   createTicket,
   getTicket,
   deleteTicket,
   updateTicket,
+  getAllTickets,
 };

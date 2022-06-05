@@ -10,6 +10,7 @@ import NewTicket from "./pages/NewTicket";
 import Tickets from "./pages/Tickets";
 import Ticket from "./pages/Ticket";
 import PrivateRoute from "./components/PrivateRoute";
+import StaffDashboard from "./pages/StaffDashboard";
 function App() {
   return (
     <>
@@ -18,6 +19,12 @@ function App() {
           <Header />
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route
+              path="/dashboard"
+              element={<PrivateRoute neededRole={["staff", "admin"]} />}
+            >
+              <Route path="/dashboard" element={<StaffDashboard />} />
+            </Route>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/new-ticket" element={<PrivateRoute />}>

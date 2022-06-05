@@ -1,18 +1,22 @@
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
-
+import { useSelector, useDispatch } from "react-redux";
+import { getRole } from "../features/auth/authSlice";
 export const useAuthStatus = () => {
   const [loggedIn, setLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
-
-  const { user } = useSelector((state) => state.auth);
+  const [currentRole, setCurrentRole] = useState("regular");
+  const { user, role } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
   useEffect(() => {
     if (user) {
+      console.log(user);
+      dispatch(getRole());
       setLoggedIn(true);
+      setCurrentRole(role);
     } else {
       setLoggedIn(false);
     }
     setLoading(false);
-  }, [user]);
-  return { loggedIn, loading };
+  }, [user, role]);
+  return { loggedIn, loading, currentRole };
 };

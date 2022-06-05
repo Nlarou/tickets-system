@@ -50,6 +50,28 @@ export const getTickets = createAsyncThunk(
   }
 );
 
+//get all tickets
+//TODO: limit by 10
+export const getAllTickets = createAsyncThunk(
+  "tickets/getAllTickets",
+  async (_, thunkAPI) => {
+    try {
+      //get the token from the auth state for the protected route
+      const token = thunkAPI.getState().auth.user.token;
+      return await ticketService.getAllTickets(token);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 //get user ticket
 export const getTicket = createAsyncThunk(
   "tickets/getTicket",
@@ -108,6 +130,19 @@ export const ticketSlice = createSlice({
         state.isSuccess = true;
       })
       .addCase(createTicket.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(getAllTickets.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getAllTickets.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.tickets = action.payload;
+      })
+      .addCase(getAllTickets.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

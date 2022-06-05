@@ -5,7 +5,7 @@ const { getNotes, createNote } = require("../controllers/noteController");
 const { protectedRoute } = require("../middleware/authMiddleware");
 router
   .route("/")
-  .get(protectedRoute, getNotes)
-  .post(protectedRoute, createNote);
+  .get(protectedRoute(), getNotes)
+  .post(protectedRoute(), createNote);
 
 module.exports = router;

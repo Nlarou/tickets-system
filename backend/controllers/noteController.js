@@ -8,7 +8,7 @@ const Ticket = require("../models/ticketModel");
 //@route GET /api/tickets/:ticketsId/notes
 //@access Private access
 const getNotes = asyncHandler(async (req, res) => {
-  //get user with  JWT id
+  //get user with JWT id
   const user = await User.findById(req.user.id);
   if (!user) {
     res.status(401);
@@ -16,11 +16,15 @@ const getNotes = asyncHandler(async (req, res) => {
   }
   const ticket = await Ticket.findById(req.params.ticketId);
 
-  if (ticket.user.toString() !== req.user.id) {
+  if (user.role === "regular" && ticket.user.toString() !== req.user.id) {
     res.status(401);
     throw new Error("User not authorized");
   }
-  const notes = await Note.find({ ticket: req.params.ticketId });
+  const notes = await Note.find({ ticket: req.params.ticketId }).populate(
+    "user",
+    "name"
+  );
+  console.log(notes);
 
   res.status(200).json(notes);
 });
@@ -37,14 +41,16 @@ const createNote = asyncHandler(async (req, res) => {
   }
   const ticket = await Ticket.findById(req.params.ticketId);
 
-  if (ticket.user.toString() !== req.user.id) {
+  //Stop other user to create note on other people tickets
+  if (user.role === "regular" && ticket.user.toString() !== req.user.id) {
     res.status(401);
     throw new Error("User not authorized");
   }
+
   const note = await Note.create({
     ticket: req.params.ticketId,
     text: req.body.text,
-    isStaff: false,
+    isStaff: ["staff", "admin"].includes(user.role),
     user: req.user.id,
   });
 
