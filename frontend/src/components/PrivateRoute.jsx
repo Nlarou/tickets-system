@@ -9,7 +9,7 @@ const PrivateRoute = ({ neededRole = ["regular", "staff", "admin"] }) => {
   if (loading) {
     return <Spinner />;
   }
-  console.log(neededRole, currentRole, neededRole.includes(currentRole));
+
   return loggedIn ? (
     neededRole.includes(currentRole) ? (
       <Outlet />

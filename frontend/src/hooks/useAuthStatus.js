@@ -9,7 +9,6 @@ export const useAuthStatus = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     if (user) {
-      console.log(user);
       dispatch(getRole());
       setLoggedIn(true);
       setCurrentRole(role);

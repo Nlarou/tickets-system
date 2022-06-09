@@ -3,6 +3,7 @@ import authService from "../auth/authService";
 
 // Get user data from localStorage
 const user = JSON.parse(localStorage.getItem("user"));
+const role = JSON.parse(localStorage.getItem("role"));
 
 const initialState = {
   user: user ? user : null,
@@ -10,6 +11,8 @@ const initialState = {
   isSuccess: false,
   isLoading: false,
   message: "",
+  role: role ? role : "regular",
+  staffMembers: [],
 };
 
 //Register new user
@@ -45,13 +48,49 @@ export const login = createAsyncThunk("auth/login", async (user, thunkAPI) => {
 });
 
 //get role of user
-export const getRole = createAsyncThunk(
-  "tickets/getRole",
+export const getRole = createAsyncThunk("auth/getRole", async (_, thunkAPI) => {
+  try {
+    //get the token from the auth state for the protected route
+    const token = thunkAPI.getState().auth.user.token;
+    return await authService.getRole(token);
+  } catch (error) {
+    const message =
+      (error.response && error.response.data && error.response.data.message) ||
+      error.message ||
+      error.toString();
+
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+//set role of user
+export const setRole = createAsyncThunk(
+  "auth/setRole",
+  async (info, thunkAPI) => {
+    try {
+      //get the token from the auth state for the protected route
+      const token = thunkAPI.getState().auth.user.token;
+      return await authService.setRole(info, token);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+//get role of user
+export const getStaffMembers = createAsyncThunk(
+  "auth/getStaffMembers",
   async (_, thunkAPI) => {
     try {
       //get the token from the auth state for the protected route
       const token = thunkAPI.getState().auth.user.token;
-      return await authService.getRole(token);
+      return await authService.getStaffMembers(token);
     } catch (error) {
       const message =
         (error.response &&
@@ -124,6 +163,31 @@ export const authSlice = createSlice({
         state.role = action.payload;
       })
       .addCase(getRole.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(setRole.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(setRole.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+      })
+      .addCase(setRole.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(getStaffMembers.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getStaffMembers.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.staffMembers = action.payload;
+      })
+      .addCase(getStaffMembers.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

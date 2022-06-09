@@ -87,10 +87,51 @@ const getRole = asyncHandler(async (req, res) => {
     throw new Error("Invalid user data");
   }
 });
+//@desc set Role
+//@route PUT /api/users/setRole
+//@access Private access
+const setRole = asyncHandler(async (req, res) => {
+  const userToChange = await User.findOne({ email: req.body.email });
+  const reqUser = await User.findById(req.user.id);
+
+  if (!userToChange || !reqUser) {
+    res.status(401);
+    throw new Error("User not found");
+  }
+  if (userToChange.role === "admin" && reqUser.role !== "super-admin") {
+    throw new Error("Not Authorized To Change This Role");
+  }
+  if (reqUser.role === "regular") {
+    throw new Error("Not Authorized To Change This Role");
+  }
+
+  await User.findByIdAndUpdate(userToChange._id, {
+    role: req.body.role,
+  });
+
+  res.status(200).json({ success: true });
+});
+
+//@desc get staff members
+//@route /api/users/getStaffMembers
+//@access Private access
+const getStaffMembers = asyncHandler(async (req, res) => {
+  const staffMembers = await User.find({
+    role: { $in: ["staff", "admin"] },
+  }).select("_id name email role");
+  if (staffMembers && req.user.role !== "regular") {
+    return res.status(200).json(staffMembers);
+  } else {
+    res.status(401);
+    throw new Error("No staff members...");
+  }
+});
 
 module.exports = {
   registerUser,
   loginUser,
   getMe,
   getRole,
+  getStaffMembers,
+  setRole,
 };

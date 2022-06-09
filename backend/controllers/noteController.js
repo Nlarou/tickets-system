@@ -24,7 +24,6 @@ const getNotes = asyncHandler(async (req, res) => {
     "user",
     "name"
   );
-  console.log(notes);
 
   res.status(200).json(notes);
 });
@@ -47,13 +46,15 @@ const createNote = asyncHandler(async (req, res) => {
     throw new Error("User not authorized");
   }
 
-  const note = await Note.create({
+  //Create the note
+  const noteCreated = await Note.create({
     ticket: req.params.ticketId,
     text: req.body.text,
     isStaff: ["staff", "admin"].includes(user.role),
     user: req.user.id,
   });
-
+  //fetch the newly create note with user information
+  const note = await Note.findById(noteCreated._id).populate("user", "name");
   res.status(200).json(note);
 });
 

@@ -10,7 +10,10 @@ import NewTicket from "./pages/NewTicket";
 import Tickets from "./pages/Tickets";
 import Ticket from "./pages/Ticket";
 import PrivateRoute from "./components/PrivateRoute";
-import StaffDashboard from "./pages/StaffDashboard";
+import Staff from "./pages/Staff";
+import UserManagement from "./pages/UserManagement";
+import Dashboard from "./pages/Dashboard";
+import HomeStaff from "./pages/HomeStaff";
 function App() {
   return (
     <>
@@ -19,11 +22,14 @@ function App() {
           <Header />
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route
-              path="/dashboard"
-              element={<PrivateRoute neededRole={["staff", "admin"]} />}
-            >
-              <Route path="/dashboard" element={<StaffDashboard />} />
+            <Route path="staff/" element={<Staff />}>
+              <Route
+                index
+                element={<PrivateRoute neededRole={["staff", "admin"]} />}
+              />
+              <Route path="home" element={<HomeStaff />} />
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="user-management" element={<UserManagement />} />
             </Route>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />

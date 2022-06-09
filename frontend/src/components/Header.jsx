@@ -16,7 +16,14 @@ function Header() {
   return (
     <header className="header">
       <div className="logo">
-        <Link to="/">Support Desk</Link>
+        <div
+          onClick={() => {
+            navigate("/");
+            window.location.reload();
+          }}
+        >
+          Support Desk
+        </div>
       </div>
       <ul>
         {user ? (

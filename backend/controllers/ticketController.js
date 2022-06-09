@@ -107,7 +107,8 @@ const updateTicket = asyncHandler(async (req, res) => {
     throw new Error("Ticket not found");
   }
 
-  if (ticket.user.toString() !== req.user.id) {
+  //Stop other regular user from updating the ticket
+  if (user.role === "regular" && ticket.user.toString() !== req.user.id) {
     res.status(401);
     throw new Error("Not Authorized");
   }
@@ -128,11 +129,6 @@ const getAllTickets = asyncHandler(async (req, res) => {
     .sort({ _id: -1 })
     .populate("user", "name");
 
-  //Make sure user is valid
-  if (!req.user.role === ("admin" || "staff")) {
-    res.status(401);
-    throw new Error("Not Authorized");
-  }
   res.status(200).json(tickets);
 });
 

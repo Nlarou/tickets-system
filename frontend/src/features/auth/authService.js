@@ -28,6 +28,36 @@ const getRole = async (token) => {
   };
 
   const response = await axios.get(API_URL + "getRole", config);
+  if (response.data) {
+    localStorage.setItem("role", JSON.stringify(response.data));
+  }
+  return response.data;
+};
+//update role
+const setRole = async (info, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.put(
+    API_URL + "setRole",
+    { role: info.currentRole, email: info.email },
+    config
+  );
+
+  return response.data;
+};
+//get role of the user
+const getStaffMembers = async (token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.get(API_URL + "getStaffMembers", config);
 
   return response.data;
 };
@@ -41,5 +71,7 @@ const authService = {
   logout,
   login,
   getRole,
+  getStaffMembers,
+  setRole,
 };
 export default authService;
